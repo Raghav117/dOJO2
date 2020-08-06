@@ -88,8 +88,7 @@ class _DojoState extends State<Dojo> {
                           ),
                         ),
                       ),
-                      
-                      index == _index
+                      index == _index && index > 0
                           ? Container(
                               child: Image.asset("assets/polygon.png"),
                             )

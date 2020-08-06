@@ -171,7 +171,6 @@ Widget batches = Container(
       ],
     ));
 
-
 Widget membership = Container(
   height: 300.0,
   color: Colors.white,
@@ -329,7 +328,7 @@ Widget instructor = Container(
 
 Widget other(context) {
   return Container(
-    height: 220.0,
+    // height: 220.0,
     width: MediaQuery.of(context).size.width,
     color: Colors.white,
     child: Padding(

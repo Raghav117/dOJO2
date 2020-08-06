@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:dojo/pages/home.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -11,11 +12,9 @@ import 'package:image/image.dart' as Im;
 import 'package:uuid/uuid.dart';
 import 'package:dojo/widgets/progress.dart';
 
-final StorageReference storageRef= FirebaseStorage.instance.ref();
-
+final StorageReference storageRef = FirebaseStorage.instance.ref();
 
 class Upload extends StatefulWidget {
-
   @override
   _UploadState createState() => _UploadState();
 }
@@ -26,6 +25,8 @@ class _UploadState extends State<Upload>
   File file;
   bool isUploading = false;
   String postId = Uuid().v4();
+
+  String caption = "";
 
   handleTakePhoto() async {
     Navigator.pop(context);
@@ -47,9 +48,6 @@ class _UploadState extends State<Upload>
     });
   }
 
-
-
-
   selectImage(parentContext) {
     return showDialog(
       context: parentContext,
@@ -59,11 +57,11 @@ class _UploadState extends State<Upload>
           children: <Widget>[
             SimpleDialogOption(
                 child: Text("Photo with Camera"), onPressed: handleTakePhoto),
-                SizedBox(height:10.0),
+            SizedBox(height: 10.0),
             SimpleDialogOption(
                 child: Text("Image from Gallery"),
                 onPressed: handleChooseFromGallery),
-                SizedBox(height:10.0),
+            SizedBox(height: 10.0),
             SimpleDialogOption(
               child: Text("Cancel"),
               onPressed: () => Navigator.pop(context),
@@ -74,32 +72,31 @@ class _UploadState extends State<Upload>
     );
   }
 
-   buildSplashScreen() {
-    return  Container(
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SvgPicture.asset('assets/upload.svg', height: 260.0),
-            Padding(
-              padding: EdgeInsets.only(top: 20.0),
-              child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+  buildSplashScreen() {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SvgPicture.asset('assets/upload.svg', height: 260.0),
+          Padding(
+            padding: EdgeInsets.only(top: 20.0),
+            child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Text(
+                  "Add Story",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22.0,
                   ),
-                  child: Text(
-                    "Add Story",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22.0,
-                    ),
-                  ),
-                  color: Colors.deepOrange,
-                  onPressed: () => selectImage(context)),
-            ),
-          ],
-        ),
-      
+                ),
+                color: Colors.deepOrange,
+                onPressed: () => selectImage(context)),
+          ),
+        ],
+      ),
     );
   }
 
@@ -121,46 +118,49 @@ class _UploadState extends State<Upload>
   }
 
   Future<String> uploadImage(imageFile) async {
-    StorageUploadTask uploadTask =
-    storageRef.child('stories').child('DOJO101').child("post_$postId.jpg").putFile(imageFile);
-      
+    StorageUploadTask uploadTask = storageRef
+        .child('stories')
+        .child('DOJO103')
+        .child("post_$postId.jpg")
+        .putFile(imageFile);
+
     StorageTaskSnapshot storageSnap = await uploadTask.onComplete;
     String downloadUrl = await storageSnap.ref.getDownloadURL();
     return downloadUrl;
-  
   }
 
-
-saveToRealtimeDatabase({String mediaUrl}){
-  FirebaseDatabase.instance.reference().child('Properties').child('DOJO101').child('property_Stories').set({
-    'image':mediaUrl,
-
-  });
-    
-}
-
-
+  saveToRealtimeDatabase({String mediaUrl}) {
+    FirebaseDatabase.instance
+        .reference()
+        .child('Stories')
+        .child('DOJO103')
+        .child(Random().nextInt(2000).toString())
+        .set({
+      "image": mediaUrl,
+      "caption": caption,
+      "date": DateTime.now().toString()
+    });
+    print(mediaUrl);
+  }
 
   handleSubmit() async {
     setState(() {
       isUploading = true;
     });
-    
-    await compressImage();
-     await uploadImage(file);
-         String mediaUrl = await uploadImage(file);
-         saveToRealtimeDatabase(
-           mediaUrl:mediaUrl,
-         );
-         
 
-      setState(() {
+    await compressImage();
+    String mediaUrl = await uploadImage(file);
+    saveToRealtimeDatabase(
+      mediaUrl: mediaUrl,
+    );
+
+    setState(() {
       file = null;
       isUploading = false;
       postId = Uuid().v4();
     });
-    
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
   }
 
   Scaffold buildUploadForm() {
@@ -191,36 +191,22 @@ saveToRealtimeDatabase({String mediaUrl}){
       body: ListView(
         children: <Widget>[
           isUploading ? linearProgress() : Text(""),
-          Container(
-            height: 220.0,
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: Center(
-              child: AspectRatio(
-                aspectRatio: 16/9,
-                child: Container(
-                  
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: FileImage(file),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          Container(color: Colors.black, child: Image.file(file)),
           Padding(
             padding: EdgeInsets.only(top: 10.0),
           ),
           ListTile(
-            leading:CircleAvatar(
-                   maxRadius: 25.0,
-                   backgroundImage: AssetImage('assets/dojo1.png'),
-                 ),
+            leading: CircleAvatar(
+              maxRadius: 25.0,
+              backgroundImage: AssetImage('assets/dojo1.png'),
+            ),
             title: Container(
               width: 250.0,
               child: TextField(
                 controller: captionController,
+                onChanged: (value) {
+                  caption = value;
+                },
                 decoration: InputDecoration(
                   hintText: "Write a caption...",
                   border: InputBorder.none,
@@ -229,14 +215,10 @@ saveToRealtimeDatabase({String mediaUrl}){
             ),
           ),
           Divider(),
-          
-          
         ],
       ),
     );
   }
-
-  
 
   bool get wantKeepAlive => true;
 

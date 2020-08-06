@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:dojo/models/story.dart';
 import 'package:dojo/widgets/open_story.dart';
 import 'package:dojo/widgets/upload_story.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
 
 class Stories extends StatefulWidget {
   @override
@@ -10,17 +12,35 @@ class Stories extends StatefulWidget {
 }
 
 class _StoriesState extends State<Stories> with SingleTickerProviderStateMixin {
-  List<Story> _stories = [
-    Story("assets/dojo2.png", "Your Story"),
-    Story("assets/dojo1.png", "DOJO 431"),
-    Story("assets/dojo1.png", "DOJO 225"),
-    Story("assets/dojo1.png", "DOJO 342"),
-    Story("assets/dojo1.png", "DOJO 221"),
-    Story("assets/dojo1.png", "DOJO 345"),
-    Story("assets/dojo1.png", "DOJO 455"),
-    Story("assets/dojo1.png", "DOJO 226"),
-  ];
+  @override
+  void initState() {
+    fetchStories();
+    _stories = List();
+    _dojoStories = List();
+    super.initState();
+  }
 
+  List<DojoStories> _dojoStories;
+  var _firebaseRef;
+
+  fetchStories() async {
+    _firebaseRef =
+        FirebaseDatabase().reference().child('Stories').once().then((value) {
+      Map x = value.value;
+      x.forEach((key, value) {
+        print(key);
+        print(value);
+        if (value != null) _dojoStories.add(DojoStories.fromJson(key, value));
+      });
+    }).whenComplete(() {
+      //! **********  ToDo  *****************
+
+      setState(() {});
+      // for (var z in _dojoStories) print(z.show());
+    });
+  }
+
+  List<Story> _stories;
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +50,11 @@ class _StoriesState extends State<Stories> with SingleTickerProviderStateMixin {
         height: 90,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: _stories.length,
+            itemCount: _dojoStories.length + 1,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              Story story = _stories[index];
+              DojoStories story;
+              if (index != 0) story = _dojoStories[index - 1];
 
               return Stack(
                   // alignment: Alignment.bottomRight,
@@ -59,18 +80,32 @@ class _StoriesState extends State<Stories> with SingleTickerProviderStateMixin {
                             onTap: () {
                               if (index == 0) {
                                 return Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Upload()));
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Upload()))
+                                    .whenComplete(() {
+                                  setState(() {});
+                                });
                               } else {
-                               return Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => OpenStory()));
+                                // print(story.show());
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) {
+                                    return OpenStory(
+                                      story: story,
+                                    );
+                                  },
+                                ));
+                                //   return Navigator.push(
+                                //       context,
+                                //       MaterialPageRoute(
+                                //           builder: (context) =>
+                                //               OpenStory(story)));
                               }
                             },
                             child: Image(
-                              image: AssetImage(story.image),
+                              image: index == 0
+                                  ? AssetImage("assets/dojo2.png")
+                                  : AssetImage("assets/dojo1.png"),
                               width: 60,
                               height: 60,
                               fit: BoxFit.cover,
@@ -86,7 +121,7 @@ class _StoriesState extends State<Stories> with SingleTickerProviderStateMixin {
                         bottom: 2,
                         left: 20.0,
                         child: Text(
-                          story.name,
+                          index == 0 ? "Upload Story" : story.dojoName,
                           style: TextStyle(color: Colors.grey),
                         )),
                     index == 0
