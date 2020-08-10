@@ -16,10 +16,12 @@ class _StoriesState extends State<Stories> with SingleTickerProviderStateMixin {
   void initState() {
     fetchStories();
     _stories = List();
+    _dojoStorie = List();
     _dojoStories = List();
     super.initState();
   }
 
+  List<DojoStories> _dojoStorie;
   List<DojoStories> _dojoStories;
   var _firebaseRef;
 
@@ -30,9 +32,15 @@ class _StoriesState extends State<Stories> with SingleTickerProviderStateMixin {
       x.forEach((key, value) {
         print(key);
         print(value);
-        if (value != null) _dojoStories.add(DojoStories.fromJson(key, value));
+        if (value != null) _dojoStorie.add(DojoStories.fromJson(key, value));
       });
     }).whenComplete(() {
+      _dojoStorie.forEach((element) {
+        if (element.stories.length == 0 || element.stories == null) {
+        } else {
+          _dojoStories.add(element);
+        }
+      });
       //! **********  ToDo  *****************
 
       setState(() {});

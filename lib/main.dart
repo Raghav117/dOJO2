@@ -1,11 +1,12 @@
 import 'package:dojo/pages/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  runApp(MaterialApp( 
+  runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: Home(),
+    home: MyApp(),
   ));
 }
 
@@ -38,7 +39,26 @@ class _MyAppState extends State<MyApp> {
     dialogloading = false;
     loading = false;
     _auth = FirebaseAuth.instance;
+    sharedPreferences();
+
     super.initState();
+  }
+
+  sharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool x = prefs.getBool("sign");
+    print("this is ");
+    print(x);
+    if (x == null || x == false) {
+    } else {
+      Navigator.of(context).pop();
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) {
+          // return
+          return Home();
+        },
+      ));
+    }
   }
 
   Future<void> verifyPhone() async {
@@ -143,6 +163,9 @@ class _MyAppState extends State<MyApp> {
       final FirebaseUser user = authResult.user;
       final FirebaseUser currentUser = await _auth.currentUser();
       assert(user.uid == currentUser.uid);
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setBool("sign", true);
       Navigator.of(context).pop();
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {
@@ -298,7 +321,6 @@ class _MyAppState extends State<MyApp> {
                                     color: Colors.grey,
                                   ),
                                   hintText: "ENTER NUMBER..",
-                                  
                                   errorText: error,
                                 ),
                                 style: TextStyle(

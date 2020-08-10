@@ -2,10 +2,9 @@ import 'package:dojo/pages/events.dart';
 import 'package:dojo/pages/profile.dart';
 import 'package:dojo/pages/search.dart';
 import 'package:dojo/pages/timeline.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-
 
 class Home extends StatefulWidget {
   @override
@@ -22,13 +21,12 @@ class _HomeState extends State<Home> {
     pageController = PageController();
   }
 
+
   @override
   void dispose() {
     pageController.dispose();
     super.dispose();
-
   }
-
 
   onPageChanged(int pageIndex) {
     setState(() {
@@ -43,6 +41,7 @@ class _HomeState extends State<Home> {
       curve: Curves.easeInOut,
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,8 +52,6 @@ class _HomeState extends State<Home> {
           Profile(),
           Events(),
           Search(),
-          
-          
         ],
         controller: pageController,
         onPageChanged: onPageChanged,
@@ -62,15 +59,13 @@ class _HomeState extends State<Home> {
       ),
       bottomNavigationBar: Material(
         elevation: 5.0,
-              child: CupertinoTabBar(
-          
+        child: CupertinoTabBar(
             currentIndex: pageIndex,
             onTap: onTap,
             activeColor: Colors.red,
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.favorite)),
               BottomNavigationBarItem(icon: Icon(Icons.account_circle)),
-              
               BottomNavigationBarItem(icon: Icon(Icons.event)),
               BottomNavigationBarItem(icon: Icon(Icons.search)),
             ]),

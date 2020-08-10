@@ -34,9 +34,9 @@ class _OpenStoryState extends State<OpenStory> {
       element.show();
       if (element != null)
         storyItems.add(StoryItem.pageImage(
+          caption: element.caption,
           url: element.image,
           controller: storyController,
-          caption: element.caption,
         ));
     });
     setState(() {});

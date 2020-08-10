@@ -4,6 +4,9 @@
 //   Story(this.image, this.name);
 // }
 
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 class DojoStories {
   String dojoName;
   List<Story> stories = List();
@@ -13,7 +16,33 @@ class DojoStories {
     dojoData.forEach((key, value) {
       print(key);
       print(value);
-      if (value != null) stories.add(Story.fromJson(dojoName, key, value));
+      if (value != null) {
+        DateTime date = DateTime.parse(value["date"]);
+        print(date);
+        var difference = DateTime.now().difference(date);
+        if (difference.inHours >= 24) {
+          // String filePath = value["image"].replaceAll(
+          //     new RegExp(
+          //         r'https://firebasestorage.googleapis.com/v0/b/dojo-c2657.appspot.com/o/'),
+          //     '');
+
+          // FirebaseStorage.instance.ref().child(filePath).delete().then(
+          //     (_) => print('Successfully deleted $filePath storage item'));
+          print(dojoName);
+          print(key);
+
+          FirebaseDatabase.instance
+              .reference()
+              .child("Stories")
+              .child(dojoName)
+              .child(key)
+              .remove()
+              .whenComplete(() {
+            print("Yeah it is deleted");
+          });
+        } else
+          stories.add(Story.fromJson(dojoName, key, value));
+      }
     });
   }
 
