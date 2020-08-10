@@ -13,7 +13,7 @@ class DojoStories {
   DojoStories.fromJson(key, value) {
     dojoName = key;
     Map dojoData = value;
-    dojoData.forEach((key, value) {
+    dojoData.forEach((key, value) async {
       print(key);
       print(value);
       if (value != null) {
@@ -21,6 +21,11 @@ class DojoStories {
         print(date);
         var difference = DateTime.now().difference(date);
         if (difference.inHours >= 24) {
+          StorageReference reference = await FirebaseStorage.instance
+              .getReferenceFromUrl(value["image"]);
+          reference.delete().whenComplete(() {
+            print("yeah");
+          });
           // String filePath = value["image"].replaceAll(
           //     new RegExp(
           //         r'https://firebasestorage.googleapis.com/v0/b/dojo-c2657.appspot.com/o/'),
