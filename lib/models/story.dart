@@ -26,13 +26,6 @@ class DojoStories {
           reference.delete().whenComplete(() {
             print("yeah");
           });
-          // String filePath = value["image"].replaceAll(
-          //     new RegExp(
-          //         r'https://firebasestorage.googleapis.com/v0/b/dojo-c2657.appspot.com/o/'),
-          //     '');
-
-          // FirebaseStorage.instance.ref().child(filePath).delete().then(
-          //     (_) => print('Successfully deleted $filePath storage item'));
           print(dojoName);
           print(key);
 
