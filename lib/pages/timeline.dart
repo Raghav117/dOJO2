@@ -1,3 +1,4 @@
+import 'package:dojo/models/global.dart';
 import 'package:dojo/widgets/dojo.dart';
 import 'package:dojo/widgets/leads.dart';
 import 'package:dojo/widgets/stories.dart';
@@ -11,13 +12,24 @@ class Timeline extends StatefulWidget {
 class _TimelineState extends State<Timeline>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-
- 
-
+  List<DropdownMenuItem> drop;
   @override
   void initState() {
     super.initState();
+    drop = List();
+    makeDrop();
     _tabController = TabController(vsync: this, length: 2);
+  }
+
+  makeDrop() {
+    dojos.forEach((element) {
+      print(element);
+      drop.add(DropdownMenuItem(
+        child: Text(element),
+        value: dojos.indexOf(element),
+      ));
+    });
+    setState(() {});
   }
 
   @override
@@ -27,35 +39,41 @@ class _TimelineState extends State<Timeline>
         backgroundColor: Colors.white,
         title: Row(
           children: <Widget>[
-            Text(
-              'DOJO001',
-              style: TextStyle(
-                color: Colors.black,
-              ),
+            Container(
+              child: DropdownButton(
+                  value: currentlyindex,
+                  // dropdownColor: Colors.red,
+                  iconEnabledColor: Colors.red,
+                  items: drop,
+                  onChanged: (value) {
+                    setState(() {
+                      currentlyindex = value;
+                    });
+                  }),
             ),
-            IconButton(
-              onPressed: () {
-                //some function
-              },
-              icon: Icon(
-                Icons.keyboard_arrow_down,
-                color: Colors.red,
-                size: 25,
-              ),
-            ),
+
+            // IconButton(
+            //   onPressed: () {
+            //     //some function
+            //   },
+            //   icon: Icon(
+            //     Icons.notifications_none,
+            //     color: Colors.red,
+            //   ),
+            // )
           ],
         ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {
-              //some function
-            },
-            icon: Icon(
-              Icons.notifications_none,
-              color: Colors.red,
-            ),
-          )
-        ],
+        // actions: <Widget>[
+        //   IconButton(
+        //     onPressed: () {
+        //       //some function
+        //     },
+        //     icon: Icon(
+        //       Icons.notifications_none,
+        //       color: Colors.red,
+        //     ),
+        //   )
+        // ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -70,7 +88,7 @@ class _TimelineState extends State<Timeline>
             tabs: <Widget>[
               Tab(
                 child: Text(
-                  'DOJO001',
+                  dojos[currentlyindex],
                   style: TextStyle(color: Colors.black),
                 ),
               ),
@@ -82,18 +100,17 @@ class _TimelineState extends State<Timeline>
             ],
           ),
           Expanded(
-                      child: TabBarView(
-                        physics: NeverScrollableScrollPhysics(),
-        controller: _tabController,
-        children: <Widget>[
-            Dojo(),
-            Leads(),
-        ],
-      ),
+            child: TabBarView(
+              physics: NeverScrollableScrollPhysics(),
+              controller: _tabController,
+              children: <Widget>[
+                Dojo(),
+                Leads(),
+              ],
+            ),
           ),
         ],
       ),
-      
     );
   }
 }

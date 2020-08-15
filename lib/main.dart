@@ -54,6 +54,7 @@ class _MyAppState extends State<MyApp> {
     print(x);
     if (x == null || x == false) {
     } else {
+      phn = prefs.getString("phone");
       Navigator.of(context).pop();
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {
@@ -211,11 +212,16 @@ class _MyAppState extends State<MyApp> {
                     SizedBox(
                       height: 8.0,
                     ),
-                    Text(
-                      'Resend OTP',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.bold,
+                    InkWell(
+                      onTap: () {
+                        verifyPhone();
+                      },
+                      child: Text(
+                        'Resend OTP',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -337,6 +343,7 @@ class _MyAppState extends State<MyApp> {
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setBool("sign", true);
+      prefs.setString("phone", phn);
       Navigator.of(context).pop();
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {
@@ -358,8 +365,8 @@ class _MyAppState extends State<MyApp> {
           dialogloading = false;
           errorMessage = 'Invalid Code';
         });
-        Navigator.of(context).pop();
-        smsOTPDialog(context);
+        // Navigator.of(context).pop();
+        // smsOTPDialog(context);
         break;
       default:
         setState(() {

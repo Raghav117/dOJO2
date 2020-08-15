@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:dojo/models/global.dart';
 import 'package:dojo/pages/home.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -120,7 +121,7 @@ class _UploadState extends State<Upload>
   Future<String> uploadImage(imageFile) async {
     StorageUploadTask uploadTask = storageRef
         .child('stories')
-        .child('DOJO103')
+        .child(dojos[currentlyindex])
         .child("post_$postId.jpg")
         .putFile(imageFile);
 
@@ -133,7 +134,7 @@ class _UploadState extends State<Upload>
     FirebaseDatabase.instance
         .reference()
         .child('Stories')
-        .child('DOJO103')
+        .child(dojos[currentlyindex])
         .child(Random().nextInt(2000).toString())
         .set({
       "image": mediaUrl,

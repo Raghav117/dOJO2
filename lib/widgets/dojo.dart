@@ -1,4 +1,5 @@
 import 'package:dojo/models/container_model.dart';
+import 'package:dojo/models/global.dart';
 import 'package:dojo/widgets/bottom_container.dart';
 import 'package:dojo/widgets/containers.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class _DojoState extends State<Dojo> {
   int index = 1;
 
   List<Info> _info = [
-    Info(text: "Rating", number: '4.7'),
+    Info(text: "Rating", number: m[dojos[0]]["property_rating"].toString()),
     Info(text: "Batches", number: '02'),
     Info(text: "Membership", number: '04'),
     Info(text: "Instructor", number: '01'),

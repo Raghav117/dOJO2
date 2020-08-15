@@ -1,13 +1,14 @@
+import 'package:dojo/models/global.dart';
 import 'package:flutter/material.dart';
 
-Widget bottomContainer= Container(
+Widget bottomContainer = Container(
   height: 200.0,
   color: Colors.white,
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       Padding(
-        padding: const EdgeInsets.only(left: 10.0,top: 10.0),
+        padding: const EdgeInsets.only(left: 10.0, top: 10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -32,7 +33,8 @@ Widget bottomContainer= Container(
             Row(
               children: <Widget>[
                 Text(
-                  '172',
+                  // "asfdasf",
+                  m[dojos[0]]["property_popularity"].toString(),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                 ),
                 SizedBox(width: 140.0),
@@ -60,18 +62,22 @@ Widget bottomContainer= Container(
                 Text(
                   '93',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-                ), 
-                SizedBox(width: 3.0,),
+                ),
+                SizedBox(
+                  width: 3.0,
+                ),
                 Container(
-                          height: 25.0,
-                          width: 70.0,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.green
-                            ),
-                              borderRadius: BorderRadius.circular(20.0)),
-                              child: Center(child: Text('Update',style: TextStyle(color: Colors.green),)),
-                        ),
+                  height: 25.0,
+                  width: 70.0,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.green),
+                      borderRadius: BorderRadius.circular(20.0)),
+                  child: Center(
+                      child: Text(
+                    'Update',
+                    style: TextStyle(color: Colors.green),
+                  )),
+                ),
                 SizedBox(width: 90.0),
                 Text(
                   '193',

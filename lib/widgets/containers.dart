@@ -1,3 +1,4 @@
+import 'package:dojo/models/global.dart';
 import 'package:flutter/material.dart';
 
 Widget batches = Container(
@@ -53,23 +54,23 @@ Widget batches = Container(
               ),
               SizedBox(height: 8.0),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    'Tuesday ',
+                    m[dojos[currentlyindex]]["property_batch1"],
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(width: 110.0),
-                  Text('7.00 PM-8.00 PM',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ))
+                  Padding(
+                    padding: const EdgeInsets.only(right: 40.0),
+                    child:
+                        Text(m[dojos[currentlyindex]]["property_batch1_timing"],
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            )),
+                  )
                 ],
-              ),
-              Text(
-                'and Saturday',
-                style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 15.0),
               Row(
@@ -192,7 +193,9 @@ Widget membership = Container(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                '₹300',
+                "₹" +
+                    m[dojos[currentlyindex]]["property_registration_fee"]
+                        .toString(),
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -252,11 +255,13 @@ Widget membership = Container(
             Row(
               children: <Widget>[
                 Text(
-                  ' ₹500',
+                  ' ₹' +
+                      m[dojos[currentlyindex]]["property_monthly_membership"],
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                 ),
                 SizedBox(width: 110.0),
-                Text('₹1400',
+                Text(
+                    '₹${m[dojos[currentlyindex]]["property_3_months_membership"]}',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22))
               ],
             ),
@@ -278,12 +283,12 @@ Widget membership = Container(
             Row(
               children: <Widget>[
                 Text(
-                  '₹2600',
+                  '₹${m[dojos[currentlyindex]]["property_6_months_membership"]}',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                 ),
                 SizedBox(width: 100.0),
                 Text(
-                  '₹5000',
+                  '₹${m[dojos[currentlyindex]]["property_yearly_membership"]}',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                 ),
               ],
@@ -314,13 +319,14 @@ Widget instructor = Container(
           height: 15.0,
         ),
         Text(
-          'Matt Johnson',
+          m[dojos[currentlyindex]]["property_instructor_name"],
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
         ),
         SizedBox(height: 7.0),
-        Text('He has represented Maharashtra in the'),
-        SizedBox(height: 2.0),
-        Text('Senior National Kho-Kho Championship six times.'),
+        Text(
+          m[dojos[currentlyindex]]["property_instructor_details"],
+          textAlign: TextAlign.center,
+        ),
       ],
     ),
   ),
@@ -345,17 +351,7 @@ Widget other(context) {
           ),
           SizedBox(height: 5.0),
           Text(
-            'Survey No 4,At post Aadi,Near Pushpa',
-            style: TextStyle(fontSize: 18),
-          ),
-          SizedBox(height: 2.0),
-          Text(
-            'Vinayak Complex,New Panvel,Maharashtra',
-            style: TextStyle(fontSize: 18),
-          ),
-          SizedBox(height: 2.0),
-          Text(
-            '410206',
+            m[dojos[currentlyindex]]["property_location"],
             style: TextStyle(fontSize: 18),
           ),
           SizedBox(height: 10.0),
@@ -370,7 +366,7 @@ Widget other(context) {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('09920994674'),
+              Text(m[dojos[currentlyindex]]["property_instructor_contact"]),
               Container(
                 height: 30,
                 width: 60,

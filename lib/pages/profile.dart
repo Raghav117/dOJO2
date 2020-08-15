@@ -10,17 +10,36 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   void initState() {
-    FirebaseDatabase.instance
-        .reference()
-        .child("Dojo Partner")
-        .child(phn)
-        .once()
-        .then((value) {
-      print(value.key);
-      print(value.value);
-    });
+    print("Hello");
+    // fetch();
     super.initState();
   }
+
+  // fetch() async {
+  //   Map m = Map();
+  //   print(phn);
+  //   await FirebaseDatabase.instance
+  //       .reference()
+  //       .child("Dojo Partner")
+  //       .child(phn)
+  //       .once()
+  //       .then((value) async {
+  //     print(value.value);
+  //     value.value.forEach((key, value) async {
+  //       print('key: $key, value: $value');
+  //       await FirebaseDatabase.instance
+  //           .reference()
+  //           .child("Properties")
+  //           .child(key)
+  //           .once()
+  //           .then((val) {
+  //         m[value.key.toString()] = val.value.toString();
+  //       });
+  //     });
+  //   }).whenComplete(() {
+  //     print(m);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
