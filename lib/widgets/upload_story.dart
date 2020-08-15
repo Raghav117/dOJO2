@@ -165,28 +165,27 @@ class _UploadState extends State<Upload>
 
   Scaffold buildUploadForm() {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.white70,
+        backgroundColor: Colors.black,
         leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
+            icon: Icon(Icons.arrow_back, color: Colors.red),
             onPressed: clearImage),
-        title: Text(
-          "Caption Post",
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: [
-          FlatButton(
-            onPressed: isUploading ? null : () => handleSubmit(),
-            child: Text(
-              "Post",
-              style: TextStyle(
-                color: Colors.blueAccent,
-                fontWeight: FontWeight.bold,
-                fontSize: 20.0,
-              ),
+        title: Row(
+          children: <Widget>[
+            CircleAvatar(
+              maxRadius: 25.0,
+              backgroundImage: AssetImage('assets/dojo1.png'),
             ),
-          ),
-        ],
+            SizedBox(
+              width: 6.0,
+            ),
+            Text(
+              'DOJO001',
+              style: TextStyle(fontSize: 18.0),
+            )
+          ],
+        ),
       ),
       body: ListView(
         children: <Widget>[
@@ -196,9 +195,10 @@ class _UploadState extends State<Upload>
             padding: EdgeInsets.only(top: 10.0),
           ),
           ListTile(
-            leading: CircleAvatar(
-              maxRadius: 25.0,
-              backgroundImage: AssetImage('assets/dojo1.png'),
+            leading: Icon(
+              Icons.photo_library,
+              color: Colors.white,
+              size: 25.0,
             ),
             title: Container(
               width: 250.0,
@@ -207,9 +207,28 @@ class _UploadState extends State<Upload>
                 onChanged: (value) {
                   caption = value;
                 },
+                style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
-                  hintText: "Write a caption...",
+                  hintText: "Add a caption....",
+                  hintStyle: TextStyle(color: Colors.white),
                   border: InputBorder.none,
+                ),
+              ),
+            ),
+            trailing: Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                color: Colors.green,
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: IconButton(
+                  onPressed: isUploading ? null : () => handleSubmit(),
+                  icon: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

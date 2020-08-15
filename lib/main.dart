@@ -1,12 +1,14 @@
 import 'package:dojo/pages/home.dart';
+import 'package:dojo/pages/splash.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: MyApp(),
+    home: SplashScreen(),
   ));
 }
 
@@ -38,6 +40,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     dialogloading = false;
     loading = false;
+    value = true;
     _auth = FirebaseAuth.instance;
     sharedPreferences();
 
@@ -94,63 +97,220 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  Future<bool> smsOTPDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return !dialogloading
-              ? AlertDialog(
-                  title: Text('Enter SMS Code'),
-                  content: Container(
-                    padding: EdgeInsets.all(20.0),
-                    height: MediaQuery.of(context).size.height / 5.63,
-                    child: TextField(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          labelText: "Sms Code",
-                          hintText: "Sms Code",
-                          prefixIcon: Icon(Icons.code),
-                          errorText: errorMessage == "" ? null : errorMessage),
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) {
-                        this.smsOTP = value;
-                      },
+  bool value;
+
+  Scaffold buildOTP(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.red,
+      body: ListView(children: [
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'DOJO',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 50.0,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              SizedBox(
+                height: 35.0,
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height - 300,
+                width: MediaQuery.of(context).size.width - 50,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width - 50,
+                      height: 100.0,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[600],
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'We have sent a "6 digit OTP"',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  'on $phn',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Container(
+                                  height: 30.0,
+                                  width: 68.0,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(22.0),
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                    'Edit',
+                                    style: TextStyle(
+                                        color: Colors.red, fontSize: 18.0),
+                                  )),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                  contentPadding: EdgeInsets.all(10),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text("Back"),
-                      onPressed: () {
-                        errorMessage = "";
-                        Navigator.of(context).pop();
-                      },
+                    SizedBox(
+                      height: 20.0,
                     ),
-                    FlatButton(
-                        child: Text('Done'),
-                        onPressed: () {
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                          if (smsOTP == "") {
-                            setState(() {
-                              errorMessage = 'Invalid Code';
-                            });
-                          } else {
-                            setState(() {
-                              dialogloading = true;
-                            });
-                            signIn();
-                          }
-                        })
+                    Text(
+                      'Unable to automatically detect OTP',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: PinInputTextField(
+                        keyboardType: TextInputType.number,
+                        onSubmit: (val) {
+                          this.smsOTP = val;
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    Text(
+                      'Resend OTP',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        print("yeah");
+                        setState(() {
+                          dialogloading = true;
+                        });
+                        signIn();
+                        //  authenticate the  OTP, and then navigate to homescreen.
+                      },
+                      child: Container(
+                        height: 50.0,
+                        width: MediaQuery.of(context).size.width - 100,
+                        decoration: BoxDecoration(
+                          color: Colors.green[400],
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Center(
+                            child: Text(
+                          'SIGN IN',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.w400),
+                        )),
+                      ),
+                    ),
                   ],
-                )
-              : Center(
-                  child: CircularProgressIndicator(),
-                );
-        });
+                ),
+              ),
+            ],
+          ),
+        ),
+      ]),
+    );
   }
+
+  smsOTPDialog(BuildContext context) {
+    return buildOTP(context);
+  }
+
+  // Future<bool> smsOTPDialog(BuildContext context) {
+  //   return showDialog(
+  //       context: context,
+  //       barrierDismissible: false,
+  //       builder: (BuildContext context) {
+  //         return !dialogloading
+  //             ? AlertDialog(
+  //                 title: Text('Enter SMS Code'),
+  //                 content: Container(
+  //                   padding: EdgeInsets.all(20.0),
+  //                   height: MediaQuery.of(context).size.height / 5.63,
+  //                   child: TextField(
+  //                     decoration: InputDecoration(
+  //                         border: OutlineInputBorder(
+  //                           borderRadius: BorderRadius.circular(20.0),
+  //                         ),
+  //                         labelText: "Sms Code",
+  //                         hintText: "Sms Code",
+  //                         prefixIcon: Icon(Icons.code),
+  //                         errorText: errorMessage == "" ? null : errorMessage),
+  //                     keyboardType: TextInputType.number,
+  //                     onChanged: (value) {
+  //                       this.smsOTP = value;
+  //                     },
+  //                   ),
+  //                 ),
+  //                 contentPadding: EdgeInsets.all(10),
+  //                 actions: <Widget>[
+  //                   FlatButton(
+  //                     child: Text("Back"),
+  //                     onPressed: () {
+  //                       errorMessage = "";
+  //                       Navigator.of(context).pop();
+  //                     },
+  //                   ),
+  //                   FlatButton(
+  //                       child: Text('Done'),
+  //                       onPressed: () {
+  //                         FocusScope.of(context).requestFocus(new FocusNode());
+  //                         if (smsOTP == "") {
+  //                           setState(() {
+  //                             errorMessage = 'Invalid Code';
+  //                           });
+  //                         } else {
+  // setState(() {
+  //   dialogloading = true;
+  // });
+  // signIn();
+  //                         }
+  //                       })
+  //                 ],
+  //               )
+  //             : Center(
+  //                 child: CircularProgressIndicator(),
+  //               );
+  //       });
+  // }
 
   signIn() async {
     try {
@@ -203,242 +363,138 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     // loading = true;
 
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
-    return Scaffold(
-        // backgroundColor: blue,
-        resizeToAvoidBottomInset: false,
-        body: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [Colors.red, Colors.redAccent])),
-          child: loading == false
-              ? Stack(
-                  children: <Widget>[
-                    Positioned(
-                      top: height / 8,
-                      left: width / 4.5,
-                      child: Row(
-                        children: <Widget>[
-                          Text(" Dojo Partner",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 35,
-                                  fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      left: width - 50,
-                      top: height / 7,
-                      child: Container(
-                        height: 100,
-                        width: 100,
-                        decoration: new BoxDecoration(
+    return dialogloading == false
+        ? value == true
+            ? Scaffold(
+                backgroundColor: Colors.red,
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'DOJO',
+                        style: TextStyle(
                           color: Colors.white,
-                          shape: BoxShape.circle,
+                          fontSize: 50.0,
+                          fontWeight: FontWeight.w900,
                         ),
                       ),
-                    ),
-
-                    Positioned(
-                      left: width / 1.5,
-                      top: height / 5,
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        decoration: new BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
+                      SizedBox(
+                        height: 20.0,
                       ),
-                    ),
-
-                    Positioned(
-                      right: width - 50,
-                      bottom: 10,
-                      child: Container(
-                        height: 100,
-                        width: 100,
-                        decoration: new BoxDecoration(
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        height: 300,
+                        width: 320,
+                        decoration: BoxDecoration(
                           color: Colors.white,
-                          shape: BoxShape.circle,
+                          borderRadius: BorderRadius.circular(20.0),
                         ),
-                      ),
-                    ),
-
-                    Positioned(
-                      right: width / 1.5,
-                      bottom: 10,
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        decoration: new BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      // height: height/2,
-                      // width: width,
-                      top: height / 3,
-                      left: width / 9,
-                      right: width / 9,
-                      // bottom: height/4,
-
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(20.0)),
-                        color: Colors.white,
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(top: 50),
-                              child: Text(
-                                "Log in",
-                                style: TextStyle(
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  'LOGIN',
+                                  style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 30.0, left: 4.0, right: 4.0),
-                              child: TextField(
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      borderSide:
-                                          BorderSide(color: Colors.red)),
-                                  suffixIcon: Icon(Icons.phone),
-                                  hintStyle: TextStyle(
-                                    letterSpacing: 1.0,
-                                    color: Colors.grey,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 28.0,
                                   ),
-                                  hintText: "ENTER NUMBER..",
-                                  errorText: error,
                                 ),
-                                style: TextStyle(
-                                  letterSpacing: 2.0,
-                                ),
-                                onChanged: (value) {
-                                  phn = value;
-                                },
-                              ),
+                                SizedBox(width: 8.0),
+                                Text(
+                                  'with your',
+                                  style: TextStyle(
+                                      fontSize: 25.0,
+                                      fontWeight: FontWeight.w500),
+                                )
+                              ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: 20.0, right: 4.0, left: 4.0, bottom: 50),
-                              child: Container(
-                                width: double.infinity,
-                                child: FlatButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          new BorderRadius.circular(10.0)),
-                                  color: Colors.redAccent,
-                                  child: Text(
-                                    "Send OTP",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20),
-                                  ),
-                                  onPressed: () {
-                                    Pattern pattern =
-                                        r'^[0][1-9]\d{9}$|^[1-9]\d{9}$';
-                                    RegExp regex = RegExp(pattern);
-                                    if (!regex.hasMatch(phn)) {
-                                      error = "Invalid Number";
-                                      setState(() {});
-                                    } else {
-                                      error = "";
-                                      phoneNo = "+91" + phn;
-                                      loading = true;
-                                      setState(() {});
-
-                                      verifyPhone();
-                                    }
-                                  },
-
+                            Text(
+                              'phone number',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 25.0),
+                            ),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            TextField(
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide(color: Colors.red)),
+                                suffixIcon: IconButton(
+                                  icon: Icon(Icons.cancel),
+                                  color: Colors.grey,
                                   // onPressed: () {
-                                  //   Navigator.of(context)
-                                  //       .push(MaterialPageRoute(
-                                  //     builder: (context) {
-                                  //       return Home();
-                                  //     },
-                                  //   ));
+                                  //   setState(() {
+                                  //   });
                                   // },
                                 ),
+                                hintStyle: TextStyle(
+                                  letterSpacing: 1.0,
+                                  color: Colors.grey,
+                                ),
+                                hintText: "enter number",
                               ),
-                            )
+                              style: TextStyle(
+                                letterSpacing: 2.0,
+                              ),
+                              onChanged: (value) {
+                                phn = value;
+                              },
+                            ),
+                            SizedBox(
+                              height: 50.0,
+                            ),
+                            Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Pattern pattern =
+                                      r'^[0][1-9]\d{9}$|^[1-9]\d{9}$';
+                                  RegExp regex = RegExp(pattern);
+                                  if (!regex.hasMatch(phn)) {
+                                    error = "Invalid Number";
+                                    setState(() {});
+                                  } else {
+                                    error = "";
+                                    phoneNo = "+91" + phn;
+                                    loading = true;
+                                    value = false;
+                                    setState(() {});
+
+                                    verifyPhone();
+                                  } // navigate to otp_screen.dart for the user to enter the otp
+                                },
+                                child: Container(
+                                  height: 45.0,
+                                  width: 170,
+                                  decoration: BoxDecoration(
+                                    color: Colors.green[400],
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                    'NEXT',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 21.0),
+                                  )),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                    ),
-                    // Align(
-                    //   alignment: Alignment.center,
-                    //   child: Card(
-                    //     color: Colors.black,
-                    //     child: Column(
-
-                    //       children: <Widget>[
-
-                    //     Text("askdhfua shfuahspfh"),
-                    //     Text("askdhfua shfuahspfh"),
-                    //     Text("askdhfua shfuahspfh"),
-                    //     Text("askdhfua shfuahspfh"),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
-
-                    Positioned(
-                        top: height / 3.6,
-                        left: width / 2.6,
-                        child: Container(
-                            child: Icon(Icons.account_circle,
-                                color: Colors.redAccent, size: 80),
-                            decoration: BoxDecoration(
-                                // shape: BoxShape.circle,
-                                color: Colors.white,
-                                border: Border.all(
-                                  style: BorderStyle.solid,
-                                  color: Colors.red,
-                                  // width: 2.0
-                                ),
-                                borderRadius: BorderRadius.circular(40.0)
-                                // borderRadius: BorderRadius.all(Border)
-                                ))),
-
-                    //       loading
-                    // ? Positioned(
-                    //     top: 0.0,
-                    //     left: 0.0,
-                    //     right: 0.0,
-                    //     bottom: 0.0,
-                    //     child: Container(
-                    //       color: Colors.black38,
-                    //       child: Center(
-                    //         child: CircularProgressIndicator(
-                    //           backgroundColor: blue,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   )
-                    // : Container(),
-                  ],
-                )
-              : Container(
-                  color: Colors.black38,
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: Colors.blue,
-                    ),
+                    ],
                   ),
                 ),
-        ));
+              )
+            : buildOTP(context)
+        : Center(
+            child: CircularProgressIndicator(),
+          );
   }
 }
