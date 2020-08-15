@@ -1,6 +1,8 @@
-import 'package:dojo/models/global.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:dojo/main.dart';
+import 'package:dojo/models/story.dart';
+import 'package:dojo/pages/dojo_support.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -8,39 +10,6 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  @override
-  void initState() {
-    print("Hello");
-    // fetch();
-    super.initState();
-  }
-
-  // fetch() async {
-  //   Map m = Map();
-  //   print(phn);
-  //   await FirebaseDatabase.instance
-  //       .reference()
-  //       .child("Dojo Partner")
-  //       .child(phn)
-  //       .once()
-  //       .then((value) async {
-  //     print(value.value);
-  //     value.value.forEach((key, value) async {
-  //       print('key: $key, value: $value');
-  //       await FirebaseDatabase.instance
-  //           .reference()
-  //           .child("Properties")
-  //           .child(key)
-  //           .once()
-  //           .then((val) {
-  //         m[value.key.toString()] = val.value.toString();
-  //       });
-  //     });
-  //   }).whenComplete(() {
-  //     print(m);
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,29 +80,35 @@ class _ProfileState extends State<Profile> {
             SizedBox(
               height: 20.0,
             ),
-            ListTile(
-              leading: Container(
-                decoration: BoxDecoration(
-                    color: Colors.orangeAccent[100],
-                    borderRadius: BorderRadius.circular(8.0)),
-                height: 50,
-                width: 50,
-                child: Center(
-                  child: Icon(
-                    Icons.call,
-                    color: Colors.black,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => DojoSupport()));
+              },
+              child: ListTile(
+                leading: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.orangeAccent[100],
+                      borderRadius: BorderRadius.circular(8.0)),
+                  height: 50,
+                  width: 50,
+                  child: Center(
+                    child: Icon(
+                      Icons.call,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
-              ),
-              title: Text(
-                'DOJO Support',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
-              ),
-              trailing: IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.black,
+                title: Text(
+                  'DOJO Support',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
+                ),
+                trailing: IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ),
@@ -170,23 +145,35 @@ class _ProfileState extends State<Profile> {
             SizedBox(
               height: 20.0,
             ),
-            ListTile(
-              leading: Container(
-                decoration: BoxDecoration(
-                    color: Colors.orangeAccent[100],
-                    borderRadius: BorderRadius.circular(8.0)),
-                height: 50,
-                width: 50,
-                child: Center(
-                  child: Icon(
-                    Icons.exit_to_app,
-                    color: Colors.black,
+            InkWell(
+              onTap: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setBool("sign", false);
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) {
+                    return MyApp();
+                  },
+                ));
+              },
+              child: ListTile(
+                leading: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.orangeAccent[100],
+                      borderRadius: BorderRadius.circular(8.0)),
+                  height: 50,
+                  width: 50,
+                  child: Center(
+                    child: Icon(
+                      Icons.exit_to_app,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
-              ),
-              title: Text(
-                'Log Out',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
+                title: Text(
+                  'Log Out',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
+                ),
               ),
             ),
           ],
