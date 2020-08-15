@@ -1,3 +1,5 @@
+import 'package:dojo/models/global.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
@@ -6,6 +8,20 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  @override
+  void initState() {
+    FirebaseDatabase.instance
+        .reference()
+        .child("Dojo Partner")
+        .child(phn)
+        .once()
+        .then((value) {
+      print(value.key);
+      print(value.value);
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,17 +77,21 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
               ),
-              title: Text('Profile',style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22.0
-              ),
+              title: Text(
+                'Profile',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
               ),
               trailing: IconButton(
-                onPressed: (){},
-                icon: Icon(Icons.arrow_forward_ios,color: Colors.black,),
+                onPressed: () {},
+                icon: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.black,
+                ),
               ),
             ),
-            SizedBox(height: 20.0,),
+            SizedBox(
+              height: 20.0,
+            ),
             ListTile(
               leading: Container(
                 decoration: BoxDecoration(
@@ -86,18 +106,21 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
               ),
-              title: Text('DOJO Support',style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22.0
-              ),
+              title: Text(
+                'DOJO Support',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
               ),
               trailing: IconButton(
-                onPressed: (){},
-                icon: Icon(Icons.arrow_forward_ios,color: Colors.black,),
+                onPressed: () {},
+                icon: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.black,
+                ),
               ),
             ),
-                        SizedBox(height: 20.0,),
-
+            SizedBox(
+              height: 20.0,
+            ),
             ListTile(
               leading: Container(
                 decoration: BoxDecoration(
@@ -113,18 +136,21 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
               ),
-              title: Text('Notifications',style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22.0
-              ),
+              title: Text(
+                'Notifications',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
               ),
               trailing: IconButton(
-                onPressed: (){},
-                icon: Icon(Icons.arrow_forward_ios,color: Colors.black,),
+                onPressed: () {},
+                icon: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.black,
+                ),
               ),
             ),
-                        SizedBox(height: 20.0,),
-
+            SizedBox(
+              height: 20.0,
+            ),
             ListTile(
               leading: Container(
                 decoration: BoxDecoration(
@@ -139,12 +165,10 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
               ),
-              title: Text('Log Out',style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22.0
+              title: Text(
+                'Log Out',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
               ),
-              ),
-              
             ),
           ],
         ),

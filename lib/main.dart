@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
+import 'models/global.dart';
+
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
@@ -20,8 +22,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String phoneNo;
 
-  String phn;
-
   String smsOTP = "";
 
   String verificationId;
@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
 
   String error;
 
-  bool loading;
+  // bool loading;
 
   bool dialogloading;
 
@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     dialogloading = false;
-    loading = false;
+    // loading = false;
     value = true;
     _auth = FirebaseAuth.instance;
     sharedPreferences();
@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> verifyPhone() async {
     final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
       setState(() {
-        loading = false;
+        dialogloading = false;
       });
       this.verificationId = verId;
       smsOTPDialog(context);
@@ -89,7 +89,7 @@ class _MyAppState extends State<MyApp> {
             setState(() {
               print(exceptio.message);
               error = "Error Occured";
-              loading = false;
+              dialogloading = false;
             });
           });
     } catch (e) {
@@ -197,8 +197,15 @@ class _MyAppState extends State<MyApp> {
                       child: PinInputTextField(
                         keyboardType: TextInputType.number,
                         onSubmit: (val) {
-                          this.smsOTP = val;
+                          smsOTP = val;
+                          print(smsOTP);
                         },
+                        onChanged: (val) {
+                          smsOTP = val;
+                        },
+                        decoration: BoxLooseDecoration(
+                            errorText:
+                                errorMessage.length != 0 ? errorMessage : null),
                       ),
                     ),
                     SizedBox(
@@ -216,11 +223,15 @@ class _MyAppState extends State<MyApp> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        print("yeah");
-                        setState(() {
-                          dialogloading = true;
-                        });
-                        signIn();
+                        if (smsOTP == "") {
+                          errorMessage = "Invalid Code";
+                          setState(() {});
+                        } else {
+                          setState(() {
+                            dialogloading = true;
+                          });
+                          signIn();
+                        }
                         //  authenticate the  OTP, and then navigate to homescreen.
                       },
                       child: Container(
@@ -293,11 +304,11 @@ class _MyAppState extends State<MyApp> {
   //                       child: Text('Done'),
   //                       onPressed: () {
   //                         FocusScope.of(context).requestFocus(new FocusNode());
-  //                         if (smsOTP == "") {
-  //                           setState(() {
-  //                             errorMessage = 'Invalid Code';
-  //                           });
-  //                         } else {
+  // if (smsOTP == "") {
+  //   setState(() {
+  //     errorMessage = 'Invalid Code';
+  //   });
+  // } else {
   // setState(() {
   //   dialogloading = true;
   // });
@@ -423,23 +434,24 @@ class _MyAppState extends State<MyApp> {
                             TextField(
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(color: Colors.red)),
-                                suffixIcon: IconButton(
-                                  icon: Icon(Icons.cancel),
-                                  color: Colors.grey,
-                                  // onPressed: () {
-                                  //   setState(() {
-                                  //   });
-                                  // },
-                                ),
-                                hintStyle: TextStyle(
-                                  letterSpacing: 1.0,
-                                  color: Colors.grey,
-                                ),
-                                hintText: "enter number",
-                              ),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderSide:
+                                          BorderSide(color: Colors.red)),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(Icons.cancel),
+                                    color: Colors.grey,
+                                    // onPressed: () {
+                                    //   setState(() {
+                                    //   });
+                                    // },
+                                  ),
+                                  hintStyle: TextStyle(
+                                    letterSpacing: 1.0,
+                                    color: Colors.grey,
+                                  ),
+                                  hintText: "enter number",
+                                  errorText: error),
                               style: TextStyle(
                                 letterSpacing: 2.0,
                               ),
@@ -462,7 +474,7 @@ class _MyAppState extends State<MyApp> {
                                   } else {
                                     error = "";
                                     phoneNo = "+91" + phn;
-                                    loading = true;
+                                    dialogloading = true;
                                     value = false;
                                     setState(() {});
 

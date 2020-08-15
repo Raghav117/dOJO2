@@ -16,6 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigationPage() {
+    Navigator.pop(context);
     Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
   }
 
