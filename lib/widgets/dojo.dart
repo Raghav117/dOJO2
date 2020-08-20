@@ -24,11 +24,41 @@ class _DojoState extends State<Dojo> {
     if (index == 0) {
       return Text('');
     } else if (index == 1) {
-      return batches;
+      return batches(context);
     } else if (index == 2) {
-      return membership;
+      return membership(context);
     } else if (index == 3) {
-      return instructor;
+      return Container(
+        color: Colors.white,
+        height: 230.0,
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: CircleAvatar(
+                  maxRadius: 50,
+                  backgroundImage: NetworkImage(
+                    'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 15.0,
+              ),
+              Text(
+                m[dojos[currentlyindex]]["property_instructor_name"],
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+              SizedBox(height: 7.0),
+              Text(
+                m[dojos[currentlyindex]]["property_instructor_details"],
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      );
     } else if (index == 4) {
       return other(context);
     }

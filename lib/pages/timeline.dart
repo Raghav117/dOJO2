@@ -49,6 +49,7 @@ class _TimelineState extends State<Timeline>
                     setState(() {
                       currentlyindex = value;
                     });
+                    print(m[dojos[currentlyindex]]);
                   }),
             ),
 

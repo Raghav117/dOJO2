@@ -512,8 +512,11 @@ class _MyAppState extends State<MyApp> {
                 ),
               )
             : buildOTP(context)
-        : Center(
-            child: CircularProgressIndicator(),
+        : Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
   }
 }
