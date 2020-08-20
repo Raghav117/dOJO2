@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:dojo/models/global.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -11,8 +14,6 @@ class _FeedBackState extends State<FeedBack> {
   final _formkey = GlobalKey<FormState>();
   bool isLoading = false;
 
-
-
   @override
   Widget build(BuildContext context) {
     return isLoading
@@ -21,9 +22,21 @@ class _FeedBackState extends State<FeedBack> {
             bottomNavigationBar: Padding(
               padding: const EdgeInsets.all(16.0),
               child: GestureDetector(
-                onTap: () {
-                  //submit feedback
-                },
+                onTap: feedbackController.text.toString != ""
+                    ? () async {
+                        await FirebaseDatabase.instance
+                            .reference()
+                            .child("Dojo Partner Feedback")
+                            .child(dojos[currentlyindex])
+                            .update({
+                          Random().nextInt(2000).toString():
+                              feedbackController.text.toString()
+                        }).whenComplete(() {
+                          feedbackController.text = "";
+                          Navigator.pop(context);
+                        });
+                      }
+                    : () {},
                 child: Container(
                   height: 50,
                   width: MediaQuery.of(context).size.width - 30,
@@ -72,21 +85,23 @@ class _FeedBackState extends State<FeedBack> {
                         Icons.mail,
                         color: Colors.black,
                       ),
-                      title: Text('test101@gmail.com'),
+                      title: Text("gmail"),
                     ),
                     ListTile(
                       leading: Icon(
                         Icons.add_call,
                         color: Colors.black,
                       ),
-                      title: Text('+919867350619'),
+                      title: Text(m[dojos[currentlyindex]]
+                          ["property_instructor_contact"]),
                     ),
                     ListTile(
                       leading: Icon(
                         Icons.account_box,
                         color: Colors.black,
                       ),
-                      title: Text('KB Roy'),
+                      title: Text(
+                          m[dojos[currentlyindex]]["property_instructor_name"]),
                     ),
                     SizedBox(height: 15.0),
                     Material(
@@ -95,7 +110,6 @@ class _FeedBackState extends State<FeedBack> {
                         padding: EdgeInsets.all(10.0),
                         child: Form(
                           key: _formkey,
-                          
                           child: Column(
                             children: <Widget>[
                               TextFormField(
@@ -110,10 +124,18 @@ class _FeedBackState extends State<FeedBack> {
                                     return null;
                                   }
                                 },
-                                onFieldSubmitted: (val) => feedbackController.text,
+                                // onFieldSubmitted: (val) async {
+                                //   await FirebaseDatabase.instance
+                                //       .reference()
+                                //       .child("Dojo Partner Feedback")
+                                //       .child(dojos[currentlyindex])
+                                //       .set({val: true}).whenComplete(() {
+                                //     feedbackController.text = "";
+                                //     Navigator.pop(context);
+                                // });
+                                // },
                                 maxLines: 10,
                               ),
-                              
                             ],
                           ),
                         ),

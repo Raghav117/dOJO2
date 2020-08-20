@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dojo/models/global.dart';
 import 'package:dojo/widgets/dojo.dart';
 import 'package:dojo/widgets/leads.dart';
@@ -11,10 +13,13 @@ class Timeline extends StatefulWidget {
 
 class _TimelineState extends State<Timeline>
     with SingleTickerProviderStateMixin {
+  bool loading = true;
   TabController _tabController;
   List<DropdownMenuItem> drop;
   @override
   void initState() {
+    loading = true;
+
     super.initState();
     drop = List();
     makeDrop();
@@ -29,7 +34,18 @@ class _TimelineState extends State<Timeline>
         value: dojos.indexOf(element),
       ));
     });
+    timer();
     setState(() {});
+  }
+
+  timer() async {
+    var z = Timer.periodic(Duration(seconds: 1), (timer) {
+      print("yeah4");
+      setState(() {
+        loading = false;
+      });
+    });
+    z.cancel();
   }
 
   @override
@@ -100,16 +116,23 @@ class _TimelineState extends State<Timeline>
               ))
             ],
           ),
-          Expanded(
-            child: TabBarView(
-              physics: NeverScrollableScrollPhysics(),
-              controller: _tabController,
-              children: <Widget>[
-                Dojo(),
-                Leads(),
-              ],
-            ),
-          ),
+          loading == false
+              ? Expanded(
+                  child: TabBarView(
+                    physics: NeverScrollableScrollPhysics(),
+                    controller: _tabController,
+                    children: <Widget>[
+                      Dojo(),
+                      Leads(),
+                    ],
+                  ),
+                )
+              : Flexible(
+                  child: Center(
+                      child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Colors.red),
+                  )),
+                ),
         ],
       ),
     );

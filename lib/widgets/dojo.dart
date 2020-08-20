@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dojo/models/container_model.dart';
 import 'package:dojo/models/global.dart';
 import 'package:dojo/widgets/bottom_container.dart';
@@ -19,6 +21,15 @@ class _DojoState extends State<Dojo> {
     Info(text: "Instructor", number: '01'),
     Info(text: "Other", number: '02'),
   ];
+  @override
+  void initState() {
+    // loading = true;
+    super.initState();
+    // print("yeah1");
+    // timer();
+  }
+
+
 
   toggleContainer(index) {
     if (index == 0) {
@@ -47,12 +58,13 @@ class _DojoState extends State<Dojo> {
                 height: 15.0,
               ),
               Text(
-                m[dojos[currentlyindex]]["property_instructor_name"],
+                m[dojos[currentlyindex]]["property_instructor_name"].toString(),
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
               ),
               SizedBox(height: 7.0),
               Text(
-                m[dojos[currentlyindex]]["property_instructor_details"],
+                m[dojos[currentlyindex]]["property_instructor_details"]
+                    .toString(),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -69,83 +81,83 @@ class _DojoState extends State<Dojo> {
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(top: 20, right: 20),
-            height: 115.0,
-            color: Colors.grey[300],
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: _info.length,
-              itemBuilder: (context, _index) {
-                Info info = _info[_index];
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      index = _index;
-                    });
-                    return toggleContainer(index);
-                  },
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 15,
-                        ),
-                        width: 150.0,
-                        color: _index == 0 ? Colors.green : Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                info.text,
-                                style: TextStyle(
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.bold,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(top: 20, right: 20),
+                  height: 115.0,
+                  color: Colors.grey[300],
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _info.length,
+                    itemBuilder: (context, _index) {
+                      Info info = _info[_index];
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            index = _index;
+                          });
+                          return toggleContainer(index);
+                        },
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.symmetric(
+                                horizontal: 15,
+                              ),
+                              width: 150.0,
+                              color: _index == 0 ? Colors.green : Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      info.text,
+                                      style: TextStyle(
+                                        fontSize: 22.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 8.0,
+                                    ),
+                                    Text(
+                                      info.number,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20.0),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              SizedBox(
-                                height: 8.0,
-                              ),
-                              Text(
-                                info.number,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.0),
-                              ),
-                            ],
-                          ),
+                            ),
+                            index == _index && index > 0
+                                ? Container(
+                                    child: Image.asset("assets/polygon.png"),
+                                  )
+                                : Container()
+                          ],
                         ),
+                      );
+                    },
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  color: Colors.grey[300],
+                  child: Column(
+                    children: <Widget>[
+                      toggleContainer(index),
+                      SizedBox(
+                        height: 15.0,
                       ),
-                      index == _index && index > 0
-                          ? Container(
-                              child: Image.asset("assets/polygon.png"),
-                            )
-                          : Container()
+                      bottomContainer,
                     ],
                   ),
-                );
-              },
-            ),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            color: Colors.grey[300],
-            child: Column(
-              children: <Widget>[
-                toggleContainer(index),
-                SizedBox(
-                  height: 15.0,
                 ),
-                bottomContainer,
               ],
             ),
-          ),
-        ],
-      ),
     ));
   }
 }

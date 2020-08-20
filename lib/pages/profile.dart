@@ -1,4 +1,5 @@
 import 'package:dojo/main.dart';
+import 'package:dojo/models/global.dart';
 import 'package:dojo/models/story.dart';
 import 'package:dojo/pages/dojo_support.dart';
 import 'package:flutter/material.dart';
@@ -18,21 +19,21 @@ class _ProfileState extends State<Profile> {
         title: Row(
           children: <Widget>[
             Text(
-              'DOJO001',
+              dojos[currentlyindex],
               style: TextStyle(
                 color: Colors.black,
               ),
             ),
-            IconButton(
-              onPressed: () {
-                //some function
-              },
-              icon: Icon(
-                Icons.keyboard_arrow_down,
-                color: Colors.red,
-                size: 25,
-              ),
-            ),
+            // IconButton(
+            //   onPressed: () {
+            //     //some function
+            //   },
+            //   icon: Icon(
+            //     Icons.keyboard_arrow_down,
+            //     color: Colors.red,
+            //     size: 25,
+            //   ),
+            // ),
           ],
         ),
         actions: <Widget>[
