@@ -1,11 +1,12 @@
+import 'package:dojo/models/global.dart';
 import 'package:flutter/material.dart';
 
-class Other extends StatefulWidget {
+class OtherEdit extends StatefulWidget {
   @override
-  _OtherState createState() => _OtherState();
+  _OtherEditState createState() => _OtherEditState();
 }
 
-class _OtherState extends State<Other> {
+class _OtherEditState extends State<OtherEdit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,10 +36,10 @@ class _OtherState extends State<Other> {
                     child: Column(
                       children: <Widget>[
                         TextFormField(
-                          initialValue: "Sanpada",
+                          initialValue: m[dojos[currentlyindex]]
+                              ["prooerty_searchadd"],
                           style: TextStyle(color: Colors.black),
                           decoration: InputDecoration(),
-                         
                           maxLines: 5,
                         ),
                       ],
@@ -54,7 +55,9 @@ class _OtherState extends State<Other> {
                 height: 10.0,
               ),
               TextFormField(
-                initialValue: "7506310493",
+                initialValue: m[dojos[currentlyindex]]
+                        ["property_instructor_contact"]
+                    .toString(),
                 style: TextStyle(
                   color: Colors.black,
                 ),

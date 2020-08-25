@@ -1,4 +1,7 @@
 import 'package:dojo/models/global.dart';
+import 'package:dojo/pages/batch_edit.dart';
+import 'package:dojo/pages/edit_other.dart';
+import 'package:dojo/pages/membership_edit.dart';
 import 'package:flutter/material.dart';
 
 Widget batches(context) {
@@ -28,11 +31,18 @@ Widget batches(context) {
                   border: Border.all(
                     color: Colors.red,
                   )),
-              child: Center(
-                  child: Text(
-                'Edit',
-                style: TextStyle(color: Colors.white),
-              )),
+              child: InkWell(
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) {
+                    return BatchEdit();
+                  },
+                )),
+                child: Center(
+                    child: Text(
+                  'Edit',
+                  style: TextStyle(color: Colors.white),
+                )),
+              ),
             ),
           ),
           Padding(
@@ -226,11 +236,20 @@ Widget membership(context) {
                 border: Border.all(
                   color: Colors.red,
                 )),
-            child: Center(
-                child: Text(
-              'Edit',
-              style: TextStyle(color: Colors.white),
-            )),
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) {
+                    return MembershipEdit();
+                  },
+                ));
+              },
+              child: Center(
+                  child: Text(
+                'Edit',
+                style: TextStyle(color: Colors.white),
+              )),
+            ),
           ),
         ),
         SizedBox(
@@ -383,11 +402,18 @@ Widget other(context) {
                   color: Colors.red,
                   borderRadius: BorderRadius.circular(300.0),
                 ),
-                child: Center(
-                    child: Text(
-                  'Edit',
-                  style: TextStyle(color: Colors.white),
-                )),
+                child: InkWell(
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) {
+                      return OtherEdit();
+                    },
+                  )),
+                  child: Center(
+                      child: Text(
+                    'Edit',
+                    style: TextStyle(color: Colors.white),
+                  )),
+                ),
               ),
             ],
           ),

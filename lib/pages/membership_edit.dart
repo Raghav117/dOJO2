@@ -1,11 +1,12 @@
+import 'package:dojo/models/global.dart';
 import 'package:flutter/material.dart';
 
-class Membership extends StatefulWidget {
+class MembershipEdit extends StatefulWidget {
   @override
-  _MembershipState createState() => _MembershipState();
+  _MembershipEditState createState() => _MembershipEditState();
 }
 
-class _MembershipState extends State<Membership> {
+class _MembershipEditState extends State<MembershipEdit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,12 +24,16 @@ class _MembershipState extends State<Membership> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: <Widget>[
-              Align(alignment: Alignment.topLeft, child: Text('Registration Fees:')),
+              Align(
+                  alignment: Alignment.topLeft,
+                  child: Text('Registration Fees:')),
               SizedBox(
                 height: 10.0,
               ),
               TextFormField(
-                initialValue: "₹500",
+                initialValue: "₹" +
+                    m[dojos[currentlyindex]]["property_registration_fee"]
+                        .toString(),
                 style: TextStyle(
                   color: Colors.black,
                 ),
@@ -46,7 +51,8 @@ class _MembershipState extends State<Membership> {
                 height: 10.0,
               ),
               TextFormField(
-                initialValue: "₹3500",
+                initialValue: ' ₹' +
+                    m[dojos[currentlyindex]]["property_monthly_membership"],
                 style: TextStyle(
                   color: Colors.black,
                 ),
@@ -59,12 +65,14 @@ class _MembershipState extends State<Membership> {
               SizedBox(
                 height: 10.0,
               ),
-              Align(alignment: Alignment.topLeft, child: Text('3 Months Fees:')),
+              Align(
+                  alignment: Alignment.topLeft, child: Text('3 Months Fees:')),
               SizedBox(
                 height: 10.0,
               ),
               TextFormField(
-                initialValue: "₹8500",
+                initialValue:
+                    '₹${m[dojos[currentlyindex]]["property_3_months_membership"]}',
                 style: TextStyle(
                   color: Colors.black,
                 ),
@@ -77,12 +85,14 @@ class _MembershipState extends State<Membership> {
               SizedBox(
                 height: 10.0,
               ),
-              Align(alignment: Alignment.topLeft, child: Text('6 Months Fees:')),
+              Align(
+                  alignment: Alignment.topLeft, child: Text('6 Months Fees:')),
               SizedBox(
                 height: 10.0,
               ),
               TextFormField(
-                initialValue: "₹15000",
+                initialValue:
+                    '₹${m[dojos[currentlyindex]]["property_6_months_membership"]}',
                 style: TextStyle(
                   color: Colors.black,
                 ),
@@ -100,7 +110,8 @@ class _MembershipState extends State<Membership> {
                 height: 10.0,
               ),
               TextFormField(
-                initialValue: "₹25000",
+                initialValue:
+                    '₹${m[dojos[currentlyindex]]["property_yearly_membership"]}',
                 style: TextStyle(
                   color: Colors.black,
                 ),
@@ -110,7 +121,7 @@ class _MembershipState extends State<Membership> {
                   ),
                 ),
               ),
-               SizedBox(
+              SizedBox(
                 height: 10.0,
               ),
               RaisedButton(

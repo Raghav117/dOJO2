@@ -2,6 +2,7 @@ import 'package:dojo/main.dart';
 import 'package:dojo/models/global.dart';
 import 'package:dojo/models/story.dart';
 import 'package:dojo/pages/dojo_support.dart';
+import 'package:dojo/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -52,29 +53,36 @@ class _ProfileState extends State<Profile> {
         padding: const EdgeInsets.symmetric(vertical: 15.0),
         child: Column(
           children: <Widget>[
-            ListTile(
-              leading: Container(
-                decoration: BoxDecoration(
-                    color: Colors.orangeAccent[100],
-                    borderRadius: BorderRadius.circular(8.0)),
-                height: 50,
-                width: 50,
-                child: Center(
-                  child: Icon(
-                    Icons.edit,
-                    color: Colors.black,
+            InkWell(
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) {
+                  return ProfilePage();
+                },
+              )),
+              child: ListTile(
+                leading: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.orangeAccent[100],
+                      borderRadius: BorderRadius.circular(8.0)),
+                  height: 50,
+                  width: 50,
+                  child: Center(
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
-              ),
-              title: Text(
-                'Profile',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
-              ),
-              trailing: IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.black,
+                title: Text(
+                  'Profile',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
+                ),
+                trailing: IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ),

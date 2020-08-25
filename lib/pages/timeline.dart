@@ -39,13 +39,12 @@ class _TimelineState extends State<Timeline>
   }
 
   timer() async {
-    var z = Timer.periodic(Duration(seconds: 1), (timer) {
-      print("yeah4");
-      setState(() {
-        loading = false;
-      });
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      if (loading == true)
+        setState(() {
+          loading = false;
+        });
     });
-    z.cancel();
   }
 
   @override

@@ -1,11 +1,12 @@
+import 'package:dojo/models/global.dart';
 import 'package:flutter/material.dart';
 
-class Batch extends StatefulWidget {
+class BatchEdit extends StatefulWidget {
   @override
-  _BatchState createState() => _BatchState();
+  _BatchEditState createState() => _BatchEditState();
 }
 
-class _BatchState extends State<Batch> {
+class _BatchEditState extends State<BatchEdit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +15,7 @@ class _BatchState extends State<Batch> {
         backgroundColor: Colors.white,
         centerTitle: true,
         title: Text(
-          'Edit Batch',
+          'Edit Batch Edit',
           style: TextStyle(color: Colors.black, fontSize: 24.0),
         ),
       ),
@@ -38,7 +39,7 @@ class _BatchState extends State<Batch> {
                   ),
                 ),
               ),
-               SizedBox(
+              SizedBox(
                 height: 10.0,
               ),
               Align(alignment: Alignment.topLeft, child: Text('Timings:')),
@@ -46,7 +47,8 @@ class _BatchState extends State<Batch> {
                 height: 10.0,
               ),
               TextFormField(
-                initialValue: "7.00 AM to 10.00 AM",
+                initialValue: m[dojos[currentlyindex]]
+                    ["property_batch1_timing"],
                 style: TextStyle(
                   color: Colors.black,
                 ),
@@ -56,7 +58,7 @@ class _BatchState extends State<Batch> {
                   ),
                 ),
               ),
-               SizedBox(
+              SizedBox(
                 height: 10.0,
               ),
               Align(alignment: Alignment.topLeft, child: Text('BATCH 2:')),
@@ -64,7 +66,7 @@ class _BatchState extends State<Batch> {
                 height: 10.0,
               ),
               TextFormField(
-                initialValue: "Monday and Tuesday",
+                initialValue: m[dojos[currentlyindex]]["property_batch1"],
                 style: TextStyle(
                   color: Colors.black,
                 ),
@@ -74,7 +76,7 @@ class _BatchState extends State<Batch> {
                   ),
                 ),
               ),
-               SizedBox(
+              SizedBox(
                 height: 10.0,
               ),
               Align(alignment: Alignment.topLeft, child: Text('Timings:')),
@@ -92,7 +94,7 @@ class _BatchState extends State<Batch> {
                   ),
                 ),
               ),
-               SizedBox(
+              SizedBox(
                 height: 10.0,
               ),
               Align(alignment: Alignment.topLeft, child: Text('BATCH 3:')),
@@ -110,8 +112,7 @@ class _BatchState extends State<Batch> {
                   ),
                 ),
               ),
-
-               SizedBox(
+              SizedBox(
                 height: 10.0,
               ),
               Align(alignment: Alignment.topLeft, child: Text('Timings:')),
@@ -129,7 +130,7 @@ class _BatchState extends State<Batch> {
                   ),
                 ),
               ),
-               SizedBox(
+              SizedBox(
                 height: 10.0,
               ),
               Align(alignment: Alignment.topLeft, child: Text('Batch 4:')),
@@ -167,13 +168,13 @@ class _BatchState extends State<Batch> {
               ),
               RaisedButton(
                 color: Colors.green,
-                onPressed: (){
+                onPressed: () {
                   //SOME FUNCTION
                 },
-
-                child: Text('SAVE',style: TextStyle(color: Colors.white),),
-              
-              
+                child: Text(
+                  'SAVE',
+                  style: TextStyle(color: Colors.white),
+                ),
               )
             ],
           ),
