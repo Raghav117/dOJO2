@@ -1,4 +1,5 @@
 import 'package:dojo/models/global.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class OtherEdit extends StatefulWidget {
@@ -7,6 +8,8 @@ class OtherEdit extends StatefulWidget {
 }
 
 class _OtherEditState extends State<OtherEdit> {
+  String location = m[dojos[currentlyindex]]["prooerty_searchadd"],
+      contact = m[dojos[currentlyindex]]["property_instructor_contact"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +39,9 @@ class _OtherEditState extends State<OtherEdit> {
                     child: Column(
                       children: <Widget>[
                         TextFormField(
+                          onChanged: (value) {
+                            location = value;
+                          },
                           initialValue: m[dojos[currentlyindex]]
                               ["prooerty_searchadd"],
                           style: TextStyle(color: Colors.black),
@@ -55,6 +61,9 @@ class _OtherEditState extends State<OtherEdit> {
                 height: 10.0,
               ),
               TextFormField(
+                onChanged: (value) {
+                  contact = value;
+                },
                 initialValue: m[dojos[currentlyindex]]
                         ["property_instructor_contact"]
                     .toString(),
@@ -73,7 +82,23 @@ class _OtherEditState extends State<OtherEdit> {
               RaisedButton(
                 color: Colors.green,
                 onPressed: () {
-                  //SOME FUNCTION
+                  if (location !=
+                      m[dojos[currentlyindex]]["prooerty_searchadd"]) {
+                    FirebaseDatabase.instance
+                        .reference()
+                        .child("Dojo Partner Request")
+                        .child(dojos[currentlyindex])
+                        .update({"location": location});
+                  }
+                  if (contact !=
+                      m[dojos[currentlyindex]]["property_instructor_contact"]) {
+                    FirebaseDatabase.instance
+                        .reference()
+                        .child("Dojo Partner Request")
+                        .child(dojos[currentlyindex])
+                        .update({"contact": contact});
+                  }
+                  Navigator.pop(context);
                 },
                 child: Text(
                   'SAVE',

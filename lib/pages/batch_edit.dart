@@ -1,4 +1,5 @@
 import 'package:dojo/models/global.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class BatchEdit extends StatefulWidget {
@@ -7,6 +8,15 @@ class BatchEdit extends StatefulWidget {
 }
 
 class _BatchEditState extends State<BatchEdit> {
+  String batchTiming1 = m[dojos[currentlyindex]]["property_batch1_timing"];
+  String batch1 = m[dojos[currentlyindex]]["property_batch1"];
+  @override
+  void initState() {
+    print(batchTiming1);
+    print(batch1);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +39,7 @@ class _BatchEditState extends State<BatchEdit> {
                 height: 10.0,
               ),
               TextFormField(
-                initialValue: "Monday to Sunday",
+                initialValue: m[dojos[currentlyindex]]["property_batch1"],
                 style: TextStyle(
                   color: Colors.black,
                 ),
@@ -38,6 +48,9 @@ class _BatchEditState extends State<BatchEdit> {
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),
+                onChanged: (value) {
+                  batch1 = value;
+                },
               ),
               SizedBox(
                 height: 10.0,
@@ -52,6 +65,9 @@ class _BatchEditState extends State<BatchEdit> {
                 style: TextStyle(
                   color: Colors.black,
                 ),
+                onChanged: (value) {
+                  batchTiming1 = value;
+                },
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0),
@@ -66,7 +82,7 @@ class _BatchEditState extends State<BatchEdit> {
                 height: 10.0,
               ),
               TextFormField(
-                initialValue: m[dojos[currentlyindex]]["property_batch1"],
+                initialValue: "Monday",
                 style: TextStyle(
                   color: Colors.black,
                 ),
@@ -169,7 +185,23 @@ class _BatchEditState extends State<BatchEdit> {
               RaisedButton(
                 color: Colors.green,
                 onPressed: () {
-                  //SOME FUNCTION
+                  if (batchTiming1 !=
+                      m[dojos[currentlyindex]]["property_batch1_timing"]
+                          .toString()) {
+                    FirebaseDatabase.instance
+                        .reference()
+                        .child("Dojo Partner Request")
+                        .child(dojos[currentlyindex])
+                        .set({"batch1 Timing": batchTiming1});
+                  }
+                  if (batch1 != m[dojos[currentlyindex]]["property_batch1"]) {
+                    FirebaseDatabase.instance
+                        .reference()
+                        .child("Dojo Partner Request")
+                        .child(dojos[currentlyindex])
+                        .set({"batch1": batch1});
+                  }
+                  Navigator.pop(context);
                 },
                 child: Text(
                   'SAVE',
