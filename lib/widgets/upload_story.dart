@@ -160,8 +160,9 @@ class _UploadState extends State<Upload>
       isUploading = false;
       postId = Uuid().v4();
     });
-
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    Navigator.pop(context);
+    // Navigator.pop(context);
+    // Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
   }
 
   Scaffold buildUploadForm() {
@@ -182,7 +183,7 @@ class _UploadState extends State<Upload>
               width: 6.0,
             ),
             Text(
-              'DOJO001',
+              dojos[currentlyindex],
               style: TextStyle(fontSize: 18.0),
             )
           ],

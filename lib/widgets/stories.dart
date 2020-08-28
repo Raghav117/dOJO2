@@ -102,7 +102,9 @@ class _StoriesState extends State<Stories> with SingleTickerProviderStateMixin {
                                       story: story,
                                     );
                                   },
-                                ));
+                                )).whenComplete(() {
+                                  setState(() {});
+                                });
                                 //   return Navigator.push(
                                 //       context,
                                 //       MaterialPageRoute(
