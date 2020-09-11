@@ -161,8 +161,8 @@ class _UploadState extends State<Upload>
       postId = Uuid().v4();
     });
     Navigator.pop(context);
-    // Navigator.pop(context);
-    // Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
   }
 
   Scaffold buildUploadForm() {

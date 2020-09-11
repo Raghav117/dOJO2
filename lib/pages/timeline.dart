@@ -34,12 +34,13 @@ class _TimelineState extends State<Timeline>
         value: dojos.indexOf(element),
       ));
     });
-    timer();
     setState(() {});
+    timer();
   }
 
+  var x;
   timer() async {
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    x = Timer.periodic(Duration(seconds: 1), (timer) {
       if (loading == true)
         setState(() {
           loading = false;
@@ -48,48 +49,56 @@ class _TimelineState extends State<Timeline>
   }
 
   @override
+  void dispose() {
+    x.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Row(
-          children: <Widget>[
-            Container(
-              child: DropdownButton(
-                  value: currentlyindex,
-                  // dropdownColor: Colors.red,
-                  iconEnabledColor: Colors.red,
-                  items: drop,
-                  onChanged: (value) {
-                    setState(() {
-                      currentlyindex = value;
-                    });
-                    print(m[dojos[currentlyindex]]);
-                  }),
-            ),
+        title: loading == false
+            ? Row(
+                children: <Widget>[
+                  Container(
+                    child: DropdownButton(
+                        value: currentlyindex,
+                        // dropdownColor: Colors.red,
+                        iconEnabledColor: Colors.red,
+                        items: drop,
+                        onChanged: (value) {
+                          setState(() {
+                            currentlyindex = value;
+                          });
+                          print(m[dojos[currentlyindex]]);
+                        }),
+                  ),
 
-            // IconButton(
-            //   onPressed: () {
-            //     //some function
-            //   },
-            //   icon: Icon(
-            //     Icons.notifications_none,
-            //     color: Colors.red,
-            //   ),
-            // )
-          ],
-        ),
-        // actions: <Widget>[
-        //   IconButton(
-        //     onPressed: () {
-        //       //some function
-        //     },
-        //     icon: Icon(
-        //       Icons.notifications_none,
-        //       color: Colors.red,
-        //     ),
-        //   )
-        // ],
+                  // IconButton(
+                  //   onPressed: () {
+                  //     //some function
+                  //   },
+                  //   icon: Icon(
+                  //     Icons.notifications_none,
+                  //     color: Colors.red,
+                  //   ),
+                  // )
+                ],
+              )
+            : Text(""),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              //some function
+            },
+            icon: Icon(
+              Icons.notifications_none,
+              color: Colors.red,
+            ),
+          )
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,

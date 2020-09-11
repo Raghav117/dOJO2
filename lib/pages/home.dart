@@ -27,6 +27,9 @@ class _HomeState extends State<Home> {
 
   Map map = Map();
   fetchData() async {
+    if (dojos.length != 0) {
+      dojos.clear();
+    }
     map.forEach((key, value) async {
       print(key);
       dojos.add(key);
@@ -42,7 +45,15 @@ class _HomeState extends State<Home> {
         print(m);
         setState(() {});
       });
+
+      FirebaseDatabase.instance
+          .reference()
+          .child("DOJO")
+          .child(key.toString())
+          .once()
+          .then((value) => m1[key] = value.value);
     });
+
     loading = false;
     setState(() {});
   }
@@ -89,38 +100,39 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return loading == false
         ? dojos.length != 0
-        ? Scaffold(
-            // key: _scaffoldKey,
-            body: PageView(
-              children: <Widget>[
-                Timeline(),
-                Profile(),
-                Events(),
-                Search(),
-              ],
-              controller: pageController,
-              onPageChanged: onPageChanged,
-              physics: NeverScrollableScrollPhysics(),
-            ),
-            bottomNavigationBar: Material(
-              elevation: 5.0,
-              child: CupertinoTabBar(
-                  currentIndex: pageIndex,
-                  onTap: onTap,
-                  activeColor: Colors.red,
-                  items: [
-                    BottomNavigationBarItem(icon: Icon(Icons.favorite)),
-                    BottomNavigationBarItem(icon: Icon(Icons.account_circle)),
-                    BottomNavigationBarItem(icon: Icon(Icons.event)),
-                    BottomNavigationBarItem(icon: Icon(Icons.search)),
-                  ]),
-            ),
-          )
-        : Scaffold(
-            body: Center(
-              child: Text("Sorry,You don't have permission to access..."),
-            ),
-          )
+            ? Scaffold(
+                // key: _scaffoldKey,
+                body: PageView(
+                  children: <Widget>[
+                    Timeline(),
+                    Profile(),
+                    Events(),
+                    Search(),
+                  ],
+                  controller: pageController,
+                  onPageChanged: onPageChanged,
+                  physics: NeverScrollableScrollPhysics(),
+                ),
+                bottomNavigationBar: Material(
+                  elevation: 5.0,
+                  child: CupertinoTabBar(
+                      currentIndex: pageIndex,
+                      onTap: onTap,
+                      activeColor: Colors.red,
+                      items: [
+                        BottomNavigationBarItem(icon: Icon(Icons.favorite)),
+                        BottomNavigationBarItem(
+                            icon: Icon(Icons.account_circle)),
+                        BottomNavigationBarItem(icon: Icon(Icons.event)),
+                        BottomNavigationBarItem(icon: Icon(Icons.search)),
+                      ]),
+                ),
+              )
+            : Scaffold(
+                body: Center(
+                  child: Text("Sorry,You don't have permission to access..."),
+                ),
+              )
         : Center(
             child: CircularProgressIndicator(),
           );
